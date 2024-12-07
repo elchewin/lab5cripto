@@ -1,2 +1,8 @@
 FROM ubuntu:16.10
-RUN apt-get update && apt-get install -y openssh-client
+
+# Actualizar los repositorios a los de old-releases
+RUN sed -i 's/http:\/\/archive.ubuntu.com/http:\/\/old-releases.ubuntu.com/g' /etc/apt/sources.list
+RUN sed -i 's/http:\/\/security.ubuntu.com/http:\/\/old-releases.ubuntu.com/g' /etc/apt/sources.list
+
+# Actualizar e instalar openssh-client y tshark
+RUN apt-get update && apt-get install -y openssh-client tshark

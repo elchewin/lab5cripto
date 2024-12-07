@@ -1,2 +1,13 @@
 FROM ubuntu:22.10
-RUN apt-get update && apt-get install -y openssh-client openssh-server
+
+# Actualizar los repositorios a los de old-releases
+RUN sed -i 's/http:\/\/archive.ubuntu.com/http:\/\/old-releases.ubuntu.com/g' /etc/apt/sources.list
+RUN sed -i 's/http:\/\/security.ubuntu.com/http:\/\/old-releases.ubuntu.com/g' /etc/apt/sources.list
+
+# Actualizar e instalar openssh-client, openssh-server y tshark
+RUN apt-get update && apt-get install -y openssh-client openssh-server tshark
+RUN useradd -m -p $(openssl passwd -1 prueba) prueba
+
+# Iniciar el servicio SSH y mantener el contenedor en ejecución
+RUN service ssh start
+CMD ["tail", "-f", "/dev/null"]
